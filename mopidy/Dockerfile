@@ -44,16 +44,19 @@ RUN pip3 install \
     Mopidy-TuneIn \
     Mopidy-YTMusic \
     Mopidy-Spotify \
-    Mopidy-Iris
+    Mopidy-Iris \
+    Mopidy-Podcast-iTunes \
+    Mopidy-Youtube
 
+RUN python3 -m pip install --upgrade youtube-dl
 RUN touch /IS_CONTAINER
 RUN useradd -ms /bin/bash mopidy
 RUN sh -c 'echo "mopidy ALL=NOPASSWD: /usr/local/lib/python3.7/dist-packages/mopidy_iris/system.sh, /usr/bin/apt*" >> /etc/sudoers'
 RUN sed -i 's+--config .*mopidy.conf+--config /home/mopidy/.config/mopidy/mopidy.conf+g' /usr/local/lib/python3.7/dist-packages/mopidy_iris/system.sh  # Fixes the silly iris script with built-in paths
 
-COPY mopidy.conf /mopidy_default.conf
-COPY mopidy.sh /usr/local/bin/mopidy.sh
+# COPY ./mopidyconfig/mopidy.conf /mopidy_default.conf
+# COPY mopidy.sh /usr/local/bin/mopidy.sh
 
 EXPOSE 6600 6680
 USER mopidy
-ENTRYPOINT ["/usr/local/bin/mopidy.sh"]
+# ENTRYPOINT ["/usr/local/bin/mopidy.sh"]

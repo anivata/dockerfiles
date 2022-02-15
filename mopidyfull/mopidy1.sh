@@ -1,10 +1,15 @@
 #!/bin/bash
-
-# Copy config if it does not already exist
-# if [ ! -f /home/mopidy/.config/mopidy/mopidy.conf ]; then
-#     cp /mopidy_default.conf /home/mopidy/.config/mopidy/mopidy.conf
-# fi
-exec cat /mopidy_default.conf | tee -a /home/mopidy/.config/mopidy/mopidy.conf
+ mkdir -p /home/mopidy/.config/mopidy/
+# exec rm -f /home/mopidy/.config/mopidy/mopidy.conf && echo "removed"
+if [ ! -f /home/mopidy/.config/mopidy/mopidy.conf ]; then
+    cp /mopidy_default.conf /home/mopidy/.config/mopidy/mopidy.conf
+fi
+echo "/home/mopidy/.config/mopidy/mopidy.conf file:"
+cat /home/mopidy/.config/mopidy/mopidy.conf
+systemd fs.protected_fifos=0
+if [ -f /home/mopidy/.config/mopidy/mopidy.conf ]; then
+    cat /mopidy_default.conf | tee /home/mopidy/.config/mopidy/mopidy.conf
+fi
 if [ ${APT_PACKAGES:+x} ]; then
     echo "-- INSTALLING APT PACKAGES $APT_PACKAGES --"
     sudo apt-get update

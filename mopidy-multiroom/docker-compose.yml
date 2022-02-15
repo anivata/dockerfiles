@@ -1,18 +1,30 @@
-mopidy:
-    image: "ivdata/mopidy"
+version: "3"
+
+services:
+
+  mopidy:
+    build:
+      context: ../mopidyfull
+    image: mopidyfull
     ports:
         - "6680:6680"
         - "6600:6600"
     volumes:
-        - fifo:/tmp/snapcast/
+        # - fifo:/tmp/snapcast/
+        - /tmp/snapcast/:/tmp/snapcast/
         - ./music:/media/music
         - ./mopidydata:/mopidy
+        # - ../mopidy/mopidyconfig:/home/mopidy/.config/mopidy
 
-snapserver:
-    image: "ivdata/snapserver"
-    ports:
-        - "1704:1704"
-        - "1705:1705"
-        - "1780:1780"
-    volumes:
-        - fifo:/tmp/snapcast/
+#   snapserver:
+#     build:
+#       context: ../snapserver
+#     image: snapserver
+#     ports:
+#         - "1704:1704"
+#         - "1705:1705"
+#         - "1780:1780"
+#     volumes:
+#         - fifo:/tmp/snapcast/
+# volumes:
+#   fifo:
